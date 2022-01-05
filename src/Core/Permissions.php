@@ -40,8 +40,7 @@ class Permissions
 
         // 获取所有可访问的路由
         $permissionRoutes = $this->getPermissions();
-
-        $routeArr = array_fill_keys($permissionRoutes, null);
+        $routeArr = array_flip($permissionRoutes);
 
         if (! isset($routeArr[$route])) {
             return false;
