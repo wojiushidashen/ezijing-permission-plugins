@@ -32,7 +32,7 @@ class PermissionMiddleware implements MiddlewareInterface
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
-        if (! $this->permissionPlugin) {
+        if (! $this->permissionPlugin->checkPermission()) {
             return $this->response->json([
                 'code' => 403,
                 'message' => '无访问权限',
