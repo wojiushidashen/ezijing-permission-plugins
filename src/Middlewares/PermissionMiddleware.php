@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Ezijing\PermissionPlugins\Middlewares;
 
 use Ezijing\PermissionPlugins\Core\Permissions;
+use Ezijing\PermissionPlugins\Exceptions\ErrorCode;
+use Ezijing\PermissionPlugins\Exceptions\PluginException;
 use Hyperf\Di\Annotation\Inject;
 use Hyperf\HttpServer\Contract\ResponseInterface as HttpResponse;
 use Psr\Http\Message\ResponseInterface;
@@ -33,10 +35,7 @@ class PermissionMiddleware implements MiddlewareInterface
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
         if (! $this->permissionPlugin->checkPermission()) {
-            return $this->response->json([
-                'code' => 403,
-                'message' => '无访问权限',
-            ]);
+            throw new PluginException(ErrorCode::INSUFFICIENT_PRIVILEGES);
         }
 
         return $handler->handle($request);

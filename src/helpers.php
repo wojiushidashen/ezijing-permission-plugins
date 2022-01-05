@@ -96,7 +96,10 @@ if (! function_exists('requestClient')) {
                 $result = $client->patch($url, $options)->getBody()->getContents();
                 break;
             default:
-                throw new \Ezijing\PermissionPlugins\Exceptions\PluginException('请求方式错误');
+                throw new \Ezijing\PermissionPlugins\Exceptions\PluginException(
+                    \Ezijing\PermissionPlugins\Exceptions\ErrorCode::ERROR,
+                    '请求方式错误'
+                );
         }
 
         return \Hyperf\Utils\Codec\Json::decode($result ?? '[]', true);

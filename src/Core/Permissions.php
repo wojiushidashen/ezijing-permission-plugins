@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Ezijing\PermissionPlugins\Core;
 
+use Ezijing\PermissionPlugins\Exceptions\ErrorCode;
 use Ezijing\PermissionPlugins\Exceptions\PluginException;
 use Hyperf\Config\Annotation\Value;
 use Hyperf\Di\Annotation\Inject;
@@ -123,7 +124,7 @@ class Permissions
     protected function verifyTheConfiguration()
     {
         if (is_null($this->config) || empty($this->config)) {
-            throw new PluginException('权限插件配置为空！');
+            throw new PluginException(ErrorCode::PERMISSION_CONFIGURATION_ERROR);
         }
     }
 
@@ -136,15 +137,15 @@ class Permissions
     private function formatRes($res)
     {
         if ($res['code'] != 0 || ! isset($res['data'])) {
-            throw new PluginException($res['message']);
+            throw new PluginException(ErrorCode::PERMISSION_OBTAINING_FAILURE, $res['message']);
         }
 
         if (! isset($res['data']['items'])) {
-            throw new PluginException('获取权限接口发生变更');
+            throw new PluginException(ErrorCode::PERMISSION_OBTAINING_FAILURE, '获取权限接口发生变更');
         }
 
         if (! is_array($res['data']['items'])) {
-            throw new PluginException('获取权限接口发生变更');
+            throw new PluginException(ErrorCode::PERMISSION_OBTAINING_FAILURE, '获取权限接口发生变更');
         }
 
         return $res['data']['items'];
