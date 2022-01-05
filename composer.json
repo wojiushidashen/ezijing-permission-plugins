@@ -1,0 +1,12 @@
+{
+    "name": "ezijing/ezijing-permission-plugins",
+    "description": "清控紫荆hyperf权限插件",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Ezijing\\EzijingPermissionPlugins\\": "src/"
+        }
+    },
+    "require": {}
+}
