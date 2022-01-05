@@ -3,6 +3,12 @@
     "description": "清控紫荆hyperf权限插件",
     "type": "library",
     "license": "MIT",
+    "authors": [
+        {
+            "name": "wangyizheng",
+            "email": "18435134258@163.com"
+        }
+    ],
     "autoload": {
         "psr-4": {
             "Ezijing\\EzijingPermissionPlugins\\": "src/"
