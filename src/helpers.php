@@ -108,8 +108,8 @@ if (! function_exists('requestClient')) {
                 $result = $client->patch($url, $options)->getBody()->getContents();
                 break;
             default:
-                throw new \Ezijing\EzijingSso\Exceptions\PluginException(
-                    \Ezijing\EzijingSso\Constants\ErrorCode::REQUEST_ERROR
+                throw new \Ezijing\PermissionPlugins\Exceptions\PluginException(
+                    \Ezijing\PermissionPlugins\Exceptions\ErrorCode::PARAMETER_ERROR
                 );
         }
 

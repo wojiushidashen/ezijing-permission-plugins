@@ -39,7 +39,8 @@ class Permissions
         $route = getRoutePath();
 
         // 获取所有可访问的路由
-        $permissionRoutes = $this->getPermissions();
+        $permissionRoutes = $this->getRoutes();
+
         $routeArr = array_flip($permissionRoutes);
 
         if (! isset($routeArr[$route])) {
@@ -54,7 +55,7 @@ class Permissions
      *
      * @return mixed
      */
-    public function getPermissions()
+    public function getRoutes()
     {
         // 初始化参数
         $apiConfig = $this->config['API'];
@@ -63,6 +64,78 @@ class Permissions
         $timestamp = time();
         $nonce = md5(uniqid('ezijing_', true));
         $data = [];
+        $header = [
+            'Cookie' => sprintf('TGC=%s', (string) $this->getTgc()),
+            'timestamp' => $timestamp,
+            'secret-id' => $this->config['SECRET_ID'],
+            'secret-key' => $this->config['SECRET_KEY'],
+            'signature' => $this->getSignature($timestamp, $nonce, $this->config['SECRET_KEY'], $data),
+            'nonce' => $nonce,
+        ];
+
+        // 获取权限
+        $res = requestClient($method, $host, $data, $header);
+
+        return $this->formatRes($res);
+    }
+
+    /**
+     * 获取角色.
+     * @return mixed
+     */
+    public function getRoles()
+    {
+        // 初始化参数
+        $apiConfig = $this->config['API'];
+        $method = $apiConfig['ROLES']['METHOD'];
+        $host = sprintf('%s%s', $this->config['HOST'], $apiConfig['ROLES']['API']);
+        $timestamp = time();
+        $nonce = md5(uniqid('ezijing_', true));
+        $data = [];
+        $header = [
+            'Cookie' => sprintf('TGC=%s', (string) $this->getTgc()),
+            'timestamp' => $timestamp,
+            'secret-id' => $this->config['SECRET_ID'],
+            'secret-key' => $this->config['SECRET_KEY'],
+            'signature' => $this->getSignature($timestamp, $nonce, $this->config['SECRET_KEY'], $data),
+            'nonce' => $nonce,
+        ];
+
+        // 获取权限
+        $res = requestClient($method, $host, $data, $header);
+
+        return $this->formatRes($res);
+    }
+
+    /**
+     * 获取权限.
+     * @param int $type 1路由权限 2菜单权限 3数据权限 4功能按钮
+     * @return mixed
+     */
+    public function getPermissions($type = 3)
+    {
+        // 初始化参数
+        $apiConfig = $this->config['API'];
+        $method = $apiConfig['PERMISSIONS']['METHOD'];
+        $host = sprintf('%s%s', $this->config['HOST'], $apiConfig['PERMISSIONS']['API']);
+        $timestamp = time();
+        $nonce = md5(uniqid('ezijing_', true));
+        $data = [];
+        $typeMap = [
+            0 => '所有',
+            1 => '路由权限',
+            2 => '菜单权限',
+            3 => '数据权限',
+            4 => '功能按钮',
+        ];
+        if (! isset($typeMap[$type])) {
+            throw new PluginException(ErrorCode::PARAMETER_ERROR);
+        }
+
+        if ($type) {
+            $data['type'] = $type;
+        }
+
         $header = [
             'Cookie' => sprintf('TGC=%s', (string) $this->getTgc()),
             'timestamp' => $timestamp,

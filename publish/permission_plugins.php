@@ -12,5 +12,15 @@ return [
             'API' => '/api/v1/user/routes',
             'DESC' => '获取当前登录用户所有被允许访问的路由(后端使用,调用是强制Cookie写入TGC)',
         ],
+        'ROLES' => [
+            'METHOD' => 'GET',
+            'API' => '/api/v1/user/roles',
+            'DESC' => '获取当前登录用户的所有角色',
+        ],
+        'PERMISSIONS' => [
+            'METHOD' => 'GET',
+            'API' => '/api/v1/user/permissions',
+            'DESC' => '获取当前登录用户的所有权限',
+        ],
     ],
 ];
